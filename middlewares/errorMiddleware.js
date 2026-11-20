@@ -1,11 +1,16 @@
 const logger = require('../common/logger');
 
-function errorHandler(err, req, res) {
+function errorHandler(err, req, res, next) {
   logger.error(err, {
-    description: 'Global errror occured',
+    description: 'Global error occurred',
     req: req.originalUrl,
   });
-  res?.status?.(500)?.json?.({ error: 'Internal Server Error' });
+
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  return res.status(500).json({ error: 'Internal Server Error' });
 }
 
 module.exports = errorHandler;

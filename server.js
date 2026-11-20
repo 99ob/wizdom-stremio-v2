@@ -38,6 +38,11 @@ addon.get('/:token/subtitles/:type/:imdbId/:query?.json', [
  */
 addon.get('/:token/srt/:id.srt', requireAddonToken, sendSrt);
 
+// Return a response for unrecognized URLs instead of leaving requests hanging.
+addon.use((req, res) => {
+  res.status(404).json({ error: 'Not Found' });
+});
+
 addon.use(errorHandler);
 
 module.exports = addon;
