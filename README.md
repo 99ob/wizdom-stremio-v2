@@ -48,3 +48,21 @@ These repos really helped me develop this addon:
 
 * [Addic7ed Stremio Addon](https://github.com/phoborsh/addic7ed-stremio-addon/blob/master/README.md)
 * [subtitles-grouping](https://github.com/Ivshti/node-subtitles-grouping)
+
+## Private token protection (Render)
+
+Set the **ADDON_TOKEN** environment variable in your Render service before deploying.
+Use a random secret of at least 32 characters. Never commit it to GitHub.
+The addon intentionally fails startup when ADDON_TOKEN is missing.
+
+Install in Stremio using:
+
+```
+https://wizdom-stremio-v2.onrender.com/YOUR_TOKEN/manifest.json
+```
+
+Or open the landing page, click Install and enter your token.
+Both the subtitles JSON route and the actual .srt downloads require the same token.
+The old public manifest/subtitle/SRT routes are no longer available.
+Note: tokens in URLs may appear in access logs, browser history or shared links.
+Keep the install URL private and rotate ADDON_TOKEN if leaked.

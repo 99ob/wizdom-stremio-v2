@@ -5,8 +5,8 @@ const SRT_ROUTE = config.get('srtUnzipperRoute');
 const PORT = config.get('port');
 const IS_PRODUCTION = config.get('isProduction');
 
-const getSubUrl = (subID) =>
-  `${SERVER_HOSTNAME}${IS_PRODUCTION ? '' : `:${PORT}`}${SRT_ROUTE}${subID}.srt`;
+const getSubUrl = (subID, token) =>
+  `${SERVER_HOSTNAME}${IS_PRODUCTION ? '' : `:${PORT}`}/${encodeURIComponent(token)}${SRT_ROUTE}${subID}.srt`;
 
 /**
  * Builds an array of subtitle object: https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/api/responses/subtitles.md
@@ -14,7 +14,7 @@ const getSubUrl = (subID) =>
  */
 const mapToStremioSubs = (req, res) => {
   const subtitles = req?.subs?.map?.((sub) => ({
-    url: getSubUrl(sub.id),
+    url: getSubUrl(sub.id, req.params.token),
     lang: 'heb',
     id: `[WIZDOM]${sub.versioname}`,
   }));

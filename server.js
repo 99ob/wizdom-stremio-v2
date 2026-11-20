@@ -7,6 +7,7 @@ const mapToStremioSubs = require('./middlewares/sendMappedSubs');
 const getWizdomSubs = require('./middlewares/getWizdomSubs');
 const errorHandler = require('./middlewares/errorMiddleware');
 const sendSrt = require('./middlewares/sendSrt');
+const requireAddonToken = require('./middlewares/requireAddonToken');
 
 const addon = express();
 addon.use(cors());
@@ -15,7 +16,7 @@ addon.use(cors());
 addon.get('/', landing);
 
 //manifest request.
-addon.get('/manifest.json', function (req, res) {
+addon.get('/:token/manifest.json', requireAddonToken, function (req, res) {
   res.send(manifest);
 });
 
@@ -25,7 +26,8 @@ addon.get('/README.md', (req, res) => {
 });
 
 //Subtitles request.
-addon.get('/subtitles/:type/:imdbId/:query?.json', [
+addon.get('/:token/subtitles/:type/:imdbId/:query?.json', [
+  requireAddonToken,
   extractTitle,
   getWizdomSubs,
   mapToStremioSubs,
@@ -34,7 +36,7 @@ addon.get('/subtitles/:type/:imdbId/:query?.json', [
 /**
  * unzips Wizdom zip files and send the srt file in it.
  */
-addon.get('/srt/:id.srt', sendSrt);
+addon.get('/:token/srt/:id.srt', requireAddonToken, sendSrt);
 
 addon.use(errorHandler);
 

@@ -283,7 +283,12 @@ function landingTemplate(manifest) {
          </div>
       </div>
       <script>
-         installLink.href = 'stremio://' + window.location.host + '/manifest.json'
+         installLink.addEventListener('click', function (event) {
+            event.preventDefault();
+            const token = window.prompt('Enter your private addon token:');
+            if (!token) return;
+            window.location.href = 'stremio://' + window.location.host + '/' + encodeURIComponent(token.trim()) + '/manifest.json';
+         });
       </script>
       
 	</body>
